@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 dataset/
-yolo/
+dnn_model/
 .DS_Store
