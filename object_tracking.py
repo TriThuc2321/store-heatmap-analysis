@@ -8,7 +8,7 @@ from imutils.video import VideoStream
 # Initialize Object Detection
 od = ObjectDetection()
 
-cap = VideoStream("dataset/in-store.mp4").start()
+cap = cv2.VideoCapture("dataset/video.mp4")
 
 # Initialize count
 count = 0
@@ -22,8 +22,10 @@ dtime = dict()
 dwell_time = dict()
 
 while True:
-    frame = cap.read()
+    ret, frame = cap.read()
     count += 1
+    if not ret:
+        break
 
     # Point current frame
     center_points_cur_frame = []
