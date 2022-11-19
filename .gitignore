@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 dataset/
+yolo/
+.DS_Store
