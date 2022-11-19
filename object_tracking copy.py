@@ -8,7 +8,7 @@ from imutils.video import VideoStream
 # Initialize Object Detection
 od = ObjectDetection()
 
-cap = VideoStream("dataset/in-store.mp4").start()
+cap = VideoStream("dataset/los_angeles.mp4").start()
 
 # Initialize count
 count = 0
@@ -23,6 +23,7 @@ dwell_time = dict()
 
 while True:
     frame = cap.read()
+    if frame is None: break
     count += 1
 
     # Point current frame
@@ -57,55 +58,51 @@ while True:
         tracking_objects_copy = tracking_objects.copy()
         center_points_cur_frame_copy = center_points_cur_frame.copy()
 
-        items = tracking_objects_copy.items()
+        for object_id, pt2 in tracking_objects_copy.items():
+            object_exists = False
+            for pt in center_points_cur_frame_copy:
+                distance = math.hypot(pt2[0] - pt[0], pt2[1] - pt[1])
 
-        if items is not None:
+                # Update IDs position
+                if distance < 20:
+                    tracking_objects[object_id] = pt
+                    object_exists = True
 
-            for object_id, pt2 in tracking_objects_copy.items():
-                object_exists = False
-                for pt in center_points_cur_frame_copy:
-                    distance = math.hypot(pt2[0] - pt[0], pt2[1] - pt[1])
+                    if object_id not in object_id_list:
+                        object_id_list.append(object_id)
+                        dtime[object_id] = datetime.datetime.now()
+                        dwell_time[object_id] = 0
+                    else:
+                        curr_time = datetime.datetime.now()
+                        old_time = dtime[object_id]
+                        time_diff = curr_time - old_time
+                        dtime[object_id] = datetime.datetime.now()
+                        sec = time_diff.seconds
+                        dwell_time[object_id] += sec
 
-                    # Update IDs position
-                    if distance < 20:
-                        tracking_objects[object_id] = pt
-                        object_exists = True
+                    if pt in center_points_cur_frame:
+                        center_points_cur_frame.remove(pt)
+                    continue
 
-                        if object_id not in object_id_list:
-                            object_id_list.append(object_id)
-                            dtime[object_id] = datetime.datetime.now()
-                            dwell_time[object_id] = 0
-                        else:
-                            curr_time = datetime.datetime.now()
-                            old_time = dtime[object_id]
-                            time_diff = curr_time - old_time
-                            dtime[object_id] = datetime.datetime.now()
-                            sec = time_diff.seconds
-                            dwell_time[object_id] += sec
+            # Remove IDs lost
+            if not object_exists:
+                tracking_objects.pop(object_id)
 
-                        if pt in center_points_cur_frame:
-                            center_points_cur_frame.remove(pt)
-                        continue
-
-                # Remove IDs lost
-                if not object_exists:
-                    tracking_objects.pop(object_id)
-
-            # Add new IDs found
-            for pt in center_points_cur_frame:
-                tracking_objects[track_id] = pt
-                track_id += 1
-                if object_id not in object_id_list:
-                    object_id_list.append(object_id)
-                    dtime[object_id] = datetime.datetime.now()
-                    dwell_time[object_id] = 0
-                else:
-                    curr_time = datetime.datetime.now()
-                    old_time = dtime[object_id]
-                    time_diff = curr_time - old_time
-                    dtime[object_id] = datetime.datetime.now()
-                    sec = time_diff.seconds
-                    dwell_time[object_id] += sec
+        # Add new IDs found
+        for pt in center_points_cur_frame:
+            tracking_objects[track_id] = pt
+            track_id += 1
+            if object_id not in object_id_list:
+                object_id_list.append(object_id)
+                dtime[object_id] = datetime.datetime.now()
+                dwell_time[object_id] = 0
+            else:
+                curr_time = datetime.datetime.now()
+                old_time = dtime[object_id]
+                time_diff = curr_time - old_time
+                dtime[object_id] = datetime.datetime.now()
+                sec = time_diff.seconds
+                dwell_time[object_id] += sec
 
     for object_id, pt in tracking_objects.items():
         # print("\n" + str(object_id))
