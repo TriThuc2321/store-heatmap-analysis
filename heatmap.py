@@ -3,10 +3,10 @@ import numpy as np
 from imutils.video import VideoStream
 
 # Parameters
-video_file = "video.mp4"
-classnames_file = "classnames.txt"
-weights_file = "yolov4.weights"
-config_file = "yolov4.cfg"
+video_file = "dataset/video.mp4"
+classnames_file = "dnn_model/classes.txt"
+weights_file = "dnn_model/yolov4-tiny.weights"
+config_file = "dnn_model/yolov4-tiny.cfg"
 conf_threshold = 0.5
 nms_threshold = 0.4
 detect_class = "person"
