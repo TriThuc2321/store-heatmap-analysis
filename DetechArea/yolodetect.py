@@ -17,9 +17,9 @@ def isInside(points, centroid):
 class YoloDetect():
     def __init__(self, detect_class="person", frame_width=1280, frame_height=720):
         # Parameters
-        self.classnames_file = "model/classnames.txt"
-        self.weights_file = "model/yolov4.weights"
-        self.config_file = "model/yolov4.cfg"
+        self.classnames_file = "../dnn_model/classes.txt"
+        self.weights_file = "../dnn_model/yolov4.weights"
+        self.config_file = "../dnn_model/yolov4.cfg"
 
         self.conf_threshold = 0.5
         self.nms_threshold = 0.4
