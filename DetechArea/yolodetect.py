@@ -2,7 +2,7 @@ from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import cv2
 import numpy as np
-from telegram_utils import send_telegram
+# from telegram_utils import send_telegram
 import datetime
 import threading
 

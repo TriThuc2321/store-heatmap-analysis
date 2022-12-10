@@ -3,7 +3,7 @@ import numpy as np
 from imutils.video import VideoStream
 from yolodetect import YoloDetect
 
-video = VideoStream('../data_set/video.mp4').start()
+video = VideoStream('../dataset/video.mp4').start()
 # chứa các điểm người dùng chọn để tạo đa giác
 points = []
 
