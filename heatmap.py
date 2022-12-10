@@ -5,8 +5,8 @@ from imutils.video import VideoStream
 # Parameters
 video_file = "dataset/video.mp4"
 classnames_file = "dnn_model/classes.txt"
-weights_file = "dnn_model/yolov4-tiny.weights"
-config_file = "dnn_model/yolov4-tiny.cfg"
+weights_file = "dnn_model/yolov4.weights"
+config_file = "dnn_model/yolov4.cfg"
 conf_threshold = 0.5
 nms_threshold = 0.4
 detect_class = "person"
@@ -123,21 +123,20 @@ while True:
         draw_prediction(frame, class_ids[i], round(
             x), round(y), round(x + w), round(y + h))
 
-    # from skimage.transform import resize
-    # temp_heat_matrix = heat_matrix.copy()
-    # temp_heat_matrix = resize(temp_heat_matrix, (frame_height, frame_width))
-    # temp_heat_matrix = temp_heat_matrix / np.max(temp_heat_matrix)
-    # temp_heat_matrix = np.uint8(temp_heat_matrix*255)
+    from skimage.transform import resize
+    temp_heat_matrix = heat_matrix.copy()
+    temp_heat_matrix = resize(temp_heat_matrix, (frame_height, frame_width))
+    temp_heat_matrix = temp_heat_matrix / np.max(temp_heat_matrix)
+    temp_heat_matrix = np.uint8(temp_heat_matrix*255)
 
-    # # Tao heat map
-    # image_heat = cv2.applyColorMap(temp_heat_matrix, cv2.COLORMAP_JET)
+    # Tao heat map
+    image_heat = cv2.applyColorMap(temp_heat_matrix, cv2.COLORMAP_JET)
 
-    # frame = draw_grid(frame)
+    frame = draw_grid(frame)
     # Chong hinh
-    # cv2.addWeighted(image_heat, alpha, frame, 1-alpha, 0, frame)
+    cv2.addWeighted(image_heat, alpha, frame, 1-alpha, 0, frame)
 
     cv2.imshow("Video", frame)
-    # cv2.imshow("Heatmap", image_heat)
     if cv2.waitKey(1) == ord('q'):
         break
 
