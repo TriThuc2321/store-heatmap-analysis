@@ -32,6 +32,10 @@ COLORS = np.random.uniform(0, 255, size=(len(classes), 3))
 
 # Ham tra ve dong va cot tu toa do x, y
 
+# [502, 253], [539, 551], [906, 518], [883, 230], [511, 205], [502, 253] [[timeStart, timeEnd, count], [timeStart, timeEnd, count] ]
+# [502, 253], [539, 551], [906, 518], [883, 230], [511, 205], [502, 253]
+# [502, 253], [539, 551], [906, 518], [883, 230], [511, 205], [502, 253]
+
 
 def get_row_col(x, y):
     row = y // cell_size
