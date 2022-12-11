@@ -5,10 +5,13 @@ from yolodetect import YoloDetect
 
 video = VideoStream('../data_set/video.mp4').start()
 # chứa các điểm người dùng chọn để tạo đa giác
-points = []
+currentPoints = []
+polygons = []
 
 # new model Yolo
 model = YoloDetect()
+
+# nếu bấm chuột trái, điểm points sẽ tự nối lại bằng hàm append
 
 
 def handle_left_click(event, x, y, flags, points):
@@ -33,7 +36,13 @@ while True:
     frame = cv2.flip(frame, 1)
 
     # Ve polygon
-    frame = draw_polygon(frame, points)
+    # frame = draw_polygon(frame, points)
+
+    for points in polygons:
+        frame = draw_polygon(frame, points)
+
+    if detect:
+        frame = model.detect(frame=frame, points=points)
 
     if detect:
         frame = model.detect(frame=frame, points=points)
@@ -42,13 +51,20 @@ while True:
     if key == ord('q'):
         break
     elif key == ord('d'):
-        points.append(points[0])
+        # points.append(points[0])
+        currentPoints.append(currentPoints[0])
+        polygons.append(currentPoints)
+        currentPoints = []
         detect = True
+
+        print(polygons)
 
     # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
 
-    cv2.setMouseCallback('Instrusion Warning', handle_left_click, points)
+    # cv2.setMouseCallback('Instrusion Warning', handle_left_click, points)
+    cv2.setMouseCallback('Instrusion Warning',
+                         handle_left_click, currentPoints)
 
 video.stop()
 cv2.destroyAllWindows()
