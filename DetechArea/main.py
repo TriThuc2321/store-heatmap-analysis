@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from imutils.video import VideoStream
+import json
 # from yolodetect import YoloDetect
 
 video = VideoStream('../dataset/video.mp4').start()
@@ -11,6 +12,7 @@ video = VideoStream('../dataset/video.mp4').start()
 
 curentPoints = []
 polygons = []
+file_name = 'polygons.json'
 
 
 def handle_left_click(event, x, y, flags, points):
@@ -27,10 +29,24 @@ def draw_polygon(frame, points):
     return frame
 
 
-detect = False
+def polygons_to_json():
+    json_object = json.dumps(polygons)
+
+    with open(file_name, "w") as outfile:
+        outfile.write(json_object)
+
+
+def json_to_polygons():
+    try:
+        with open(file_name, 'r') as openfile:
+            return json.load(openfile)
+    except IOError:
+        return []
+
+
+polygons = json_to_polygons()
 
 while True:
-
     frame = video.read()
     frame = cv2.flip(frame, 1)
 
@@ -39,18 +55,28 @@ while True:
     for points in polygons:
         frame = draw_polygon(frame, points)
 
-    # if detect:
-    #     frame = model.detect(frame=frame, points=points)
-
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
-    elif key == ord('d'):
-        curentPoints.append(curentPoints[0])
-        polygons.append(curentPoints)
+
+    elif key == ord('a'):
+        if curentPoints:
+            curentPoints.append(curentPoints[0])
+            polygons.append(curentPoints)
         curentPoints = []
         # detect = True
         print(polygons)
+
+    elif key == ord('d'):
+        print('d')
+        if curentPoints:
+            curentPoints.pop()
+        elif polygons:
+            polygons.pop()
+
+    elif key == ord('s'):
+        polygons_to_json()
+        break
 
     # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
