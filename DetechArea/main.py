@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 from imutils.video import VideoStream
+import json
 # from yolodetect import YoloDetect
 
 video = VideoStream('../dataset/video.mp4').start()
@@ -11,6 +12,7 @@ video = VideoStream('../dataset/video.mp4').start()
 
 curentPoints = []
 polygons = []
+file_name = 'area.json'
 
 
 def handle_left_click(event, x, y, flags, points):
@@ -18,26 +20,69 @@ def handle_left_click(event, x, y, flags, points):
         points.append([x, y])
 
 
-def draw_polygon(frame, points):
-    for point in points:
-        frame = cv2.circle(frame, (point[0], point[1]), 5, (0, 0, 255), -1)
+def draw_polygon(frame, points, idx):
+    if (len(points) != 0):
+        first_point = points[0]
+        rect_text = str(idx)
+        for point in points:
+            frame = cv2.circle(frame, (point[0], point[1]), 5, (0, 0, 255), -1)
 
-    frame = cv2.polylines(frame, [np.int32(points)],
-                          False, (255, 0, 0), thickness=2)
+        frame = cv2.polylines(frame, [np.int32(points)],
+                              False, (255, 0, 0), thickness=2)
+        frame = cv2.putText(frame, rect_text, (first_point[0], first_point[1] + 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+        rect_text = ""
     return frame
 
 
-detect = False
+def progress_cal():
+    cv2.destroyWindow("Instrusion Warning")
+    # cv2.destroyAllWindows()
+    video = VideoStream('../dataset/video.mp4').start()
+
+    while True:
+        frame = video.read()
+        frame = cv2.flip(frame, 1)
+        key = cv2.waitKey(1)
+        if key == ord('q'):
+            break
+        for idx, list_points in enumerate(polygons):
+            frame = draw_polygon(frame, list_points, idx)
+        cv2.imshow("Calculate", frame)
+
+    video.stop()
+    cv2.destroyAllWindows()
+
+
+detect = []
+
+
+def polygons_to_json():
+    json_object = json.dumps(polygons)
+
+    with open(file_name, "w") as outfile:
+        outfile.write(json_object)
+
+
+def json_to_polygons():
+    try:
+        with open(file_name, 'r') as openfile:
+            return json.load(openfile)
+    except IOError:
+        return []
+
+
+#polygons = json_to_polygons()
 
 while True:
 
     frame = video.read()
     frame = cv2.flip(frame, 1)
 
-    draw_polygon(frame, curentPoints)
+    draw_polygon(frame, curentPoints, len(polygons))
     # Ve polygon
-    for points in polygons:
-        frame = draw_polygon(frame, points)
+    for idx, points in enumerate(polygons):
+        frame = draw_polygon(frame, points, idx)
 
     # if detect:
     #     frame = model.detect(frame=frame, points=points)
@@ -45,17 +90,29 @@ while True:
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
-    elif key == ord('d'):
-        curentPoints.append(curentPoints[0])
-        polygons.append(curentPoints)
+    elif key == ord('a'):
+        if curentPoints:
+            curentPoints.append(curentPoints[0])
+            polygons.append(curentPoints)
         curentPoints = []
         # detect = True
         print(polygons)
+
+    elif key == ord('d'):
+        print('d')
+        if curentPoints:
+            curentPoints.pop()
+        elif polygons:
+            polygons.pop()
+    elif key == ord('\r'):
+        polygons_to_json()
+        video.stop()
+        progress_cal()
 
     # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
 
     cv2.setMouseCallback('Instrusion Warning', handle_left_click, curentPoints)
 
-video.stop()
-cv2.destroyAllWindows()
+# video.stop()
+# cv2.destroyAllWindows()
