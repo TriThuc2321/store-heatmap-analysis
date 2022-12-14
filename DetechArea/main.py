@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 from imutils.video import VideoStream
 import json
-# from yolodetect import YoloDetect
+from checking import checking
+import datetime
 
 video = VideoStream('../dataset/video.mp4').start()
 # chứa các điểm người dùng chọn để tạo đa giác
@@ -39,16 +40,20 @@ def progress_cal():
     cv2.destroyWindow("Instrusion Warning")
     # cv2.destroyAllWindows()
     video = VideoStream('../dataset/video.mp4').start()
-
+    begin_time = datetime.datetime.now()
     while True:
         frame = video.read()
         frame = cv2.flip(frame, 1)
+        curr_time = datetime.datetime.now()
+        sec = (curr_time - begin_time).seconds
+        # print(sec)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
         cv2.imshow("Calculate", frame)
+        checking(frame=frame, polygons=polygons, clock=sec)
 
     video.stop()
     cv2.destroyAllWindows()
@@ -96,10 +101,8 @@ while True:
             polygons.append(curentPoints)
         curentPoints = []
         # detect = True
-        print(polygons)
 
     elif key == ord('d'):
-        print('d')
         if curentPoints:
             curentPoints.pop()
         elif polygons:

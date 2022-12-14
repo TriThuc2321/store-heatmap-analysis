@@ -3,7 +3,7 @@ import numpy as np
 
 
 class ObjectDetection:
-    def __init__(self, weights_path="dnn_model/yolov4.weights", cfg_path="dnn_model/yolov4.cfg"):
+    def __init__(self, weights_path="../dnn_model/yolov4-tiny.weights", cfg_path="../dnn_model/yolov4-tiny.cfg"):
         self.nmsThreshold = 0.4
         self.confThreshold = 0.5
         self.image_size = 608
@@ -23,7 +23,7 @@ class ObjectDetection:
         self.model.setInputParams(
             size=(self.image_size, self.image_size), scale=1/255)
 
-    def load_class_names(self, classes_path="dnn_model/classes.txt"):
+    def load_class_names(self, classes_path="../dnn_model/classes.txt"):
 
         with open(classes_path, "r") as file_object:
             for class_name in file_object.readlines():
