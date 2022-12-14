@@ -52,8 +52,9 @@ def progress_cal():
             break
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
-        cv2.imshow("Calculate", frame)
+        
         checking(frame=frame, polygons=polygons, clock=sec)
+        cv2.imshow("Calculate", frame)
 
     video.stop()
     cv2.destroyAllWindows()
