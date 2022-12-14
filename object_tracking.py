@@ -3,11 +3,13 @@ import numpy as np
 from object_detection import ObjectDetection
 import math
 import datetime
+from imutils.video import VideoStream
 
 # Initialize Object Detection
 od = ObjectDetection()
 
-cap = cv2.VideoCapture("los_angeles.mp4")
+# cap = cv2.VideoCapture("los_angeles.mp4")
+cap = VideoStream("./dataset/video.mp4").start()
 
 # Initialize count
 count = 0
@@ -21,10 +23,8 @@ dtime = dict()
 dwell_time = dict()
 
 while True:
-    ret, frame = cap.read()
+    frame = cap.read()
     count += 1
-    if not ret:
-        break
 
     # Point current frame
     center_points_cur_frame = []
