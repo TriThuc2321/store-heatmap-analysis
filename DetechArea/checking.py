@@ -19,12 +19,12 @@ def is_inside(points, centroid):
 def compare_polygons(polygons, centroid, clock, list_results_by_frame):
     # compare a point inside which polygons?
     # print('aaaaaaa')
-    print(list_results_by_frame)
+    # print(list_results_by_frame)
     for idx, polygon in enumerate(polygons):
         if (is_inside(polygon, centroid)):
-            print(list_results_by_frame[idx])
+            # print(list_results_by_frame[idx])
             list_results_by_frame[idx]['count'] += 1
-            list_results_by_frame[idx]['start_time'] = str(clock)
+            list_results_by_frame[idx]['start_time'] = clock
             break
 
 
@@ -32,7 +32,7 @@ def recheck_area(clock, list_results_by_frame):
     # check the polygon that contain person in each frame?
     for idx, area in enumerate(list_results_by_frame):
         if (area['count'] == 0):
-            list_results_by_frame[idx]['end_time'] = str(clock)
+            list_results_by_frame[idx]['end_time'] = clock
 
 
 def checking(frame, polygons, clock):
@@ -40,8 +40,8 @@ def checking(frame, polygons, clock):
     list_results_by_frame = []
     for idx in enumerate(polygons):
         res = {
-            'start_time': '0',
-            'end_time': '0',
+            'start_time': 0,
+            'end_time': 0,
             'count': 0
         }
         list_results_by_frame.append(res)

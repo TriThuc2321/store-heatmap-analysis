@@ -4,6 +4,7 @@ from imutils.video import VideoStream
 import json
 from checking import checking
 import datetime
+from analyst import analyst_to_excel
 
 video = VideoStream('../dataset/video.mp4').start()
 # chứa các điểm người dùng chọn để tạo đa giác
@@ -52,11 +53,13 @@ def progress_cal():
             break
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
-        
+
         checking(frame=frame, polygons=polygons, clock=sec)
+
         cv2.imshow("Calculate", frame)
 
     video.stop()
+    analyst_to_excel()
     cv2.destroyAllWindows()
 
 
