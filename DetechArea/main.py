@@ -2,12 +2,14 @@ import cv2
 import numpy as np
 from imutils.video import VideoStream
 from yolodetect import YoloDetect
+import json
 
 video = VideoStream('../dataset/video.mp4').start()
 
 # chứa các điểm người dùng chọn để tạo đa giác
 currentPoints = []
 polygons = []
+file_name = 'polygons.json'
 
 # new model Yolo
 model = YoloDetect()
@@ -18,6 +20,8 @@ model = YoloDetect()
 def handle_left_click(event, x, y, flags, points):
     if event == cv2.EVENT_LBUTTONDOWN:
         points.append([x, y])
+
+# draw polygon
 
 
 def draw_polygon(frame, points):
@@ -30,6 +34,27 @@ def draw_polygon(frame, points):
 
 
 detect = False
+
+
+def polygons_to_json():
+    json_object = json.dumps(polygons)
+
+    with open(file_name, "w") as outfile:
+        outfile.write(json_object)
+
+# draw polygons from json
+
+
+def json_to_polygons():
+    try:
+        with open(file_name, 'r') as openfile:
+            return json.load(openfile)
+    except IOError:
+        return []
+
+
+polygons = json_to_polygons()
+
 
 while True:
 
@@ -47,20 +72,42 @@ while True:
     if detect:
         frame = model.detect(frame=frame, points=points)
 
-    if detect:
-        frame = model.detect(frame=frame, points=points)
+    # if detect:
+    #     frame = model.detect(frame=frame, points=points)
 
     key = cv2.waitKey(1)
     if key == ord('q'):
         break
-    elif key == ord('d'):
-        # points.append(points[0])
-        currentPoints.append(currentPoints[0])
-        polygons.append(currentPoints)
+
+    # Bấm a để nối 2 điểm còn lại của polygons
+    elif key == ord('a'):
+        if currentPoints:
+            currentPoints.append(currentPoints[0])
+            polygons.append(currentPoints)
         currentPoints = []
         detect = True
-
         print(polygons)
+
+    # Bấm d để xóa mỗi cạnh của polygon
+    elif key == ord('d'): 
+        # # points.append(points[0])
+        # if currentPoints:
+        #     currentPoints.append(currentPoints[0])
+        #     polygons.append(currentPoints)
+        # currentPoints = []
+        # detect = True
+
+        # print(polygons)
+
+        print('d')
+        if currentPoints:
+            currentPoints.pop()
+        elif polygons:
+            polygons.pop()
+
+    elif key == ord('s'):
+        polygons_to_json()
+        break
 
     # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
