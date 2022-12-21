@@ -16,6 +16,8 @@ curentPoints = []
 polygons = []
 file_name = 'area.json'
 
+FRAME_PER_SECOND = 4
+
 
 def handle_left_click(event, x, y, flags, points):
     if event == cv2.EVENT_LBUTTONDOWN:
@@ -40,7 +42,8 @@ def draw_polygon(frame, points, idx):
 def progress_cal():
     cv2.destroyWindow("Instrusion Warning")
     # cv2.destroyAllWindows()
-    video = VideoStream('../dataset/video.mp4').start()
+    video = VideoStream('../dataset/video.mp4',
+                        framerate=FRAME_PER_SECOND).start()
     begin_time = datetime.datetime.now()
     while True:
         frame = video.read()
@@ -54,7 +57,7 @@ def progress_cal():
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
 
-        checking(frame=frame, polygons=polygons, clock=sec)
+        checking(frame=frame, polygons=polygons)
 
         cv2.imshow("Calculate", frame)
 
