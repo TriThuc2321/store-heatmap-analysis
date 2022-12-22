@@ -89,15 +89,7 @@ while True:
         print(polygons)
 
     # Bấm d để xóa mỗi cạnh của polygon
-    elif key == ord('d'): 
-        # # points.append(points[0])
-        # if currentPoints:
-        #     currentPoints.append(currentPoints[0])
-        #     polygons.append(currentPoints)
-        # currentPoints = []
-        # detect = True
-
-        # print(polygons)
+    elif key == ord('d'):
 
         print('d')
         if currentPoints:
@@ -105,6 +97,7 @@ while True:
         elif polygons:
             polygons.pop()
 
+    # Bấm s để trích polygons thành lưu tọa độ vào json
     elif key == ord('s'):
         polygons_to_json()
         break
