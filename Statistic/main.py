@@ -6,7 +6,7 @@ from checking import checking
 import datetime
 from analyst import analyst_to_excel
 
-video = VideoStream('../dataset/video1.mp4').start()
+video = VideoStream('../dataset/video.mp4').start()
 # chứa các điểm người dùng chọn để tạo đa giác
 # points1 = [[100, 200], [100, 300], [200, 150], [100, 200]]
 # points2 = [[300, 400], [300, 500], [400, 250], [300, 400]]
@@ -42,15 +42,11 @@ def draw_polygon(frame, points, idx):
 def progress_cal():
     cv2.destroyWindow("Instrusion Warning")
     # cv2.destroyAllWindows()
-    video = VideoStream('../dataset/video1.mp4',
+    video = VideoStream('../dataset/video.mp4',
                         framerate=FRAME_PER_SECOND).start()
-    begin_time = datetime.datetime.now()
     while True:
         frame = video.read()
         frame = cv2.flip(frame, 1)
-        curr_time = datetime.datetime.now()
-        sec = (curr_time - begin_time).seconds
-        # print(sec)
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
@@ -84,7 +80,7 @@ def json_to_polygons():
         return []
 
 
-#polygons = json_to_polygons()
+polygons = json_to_polygons()
 
 while True:
 
@@ -96,33 +92,27 @@ while True:
     for idx, points in enumerate(polygons):
         frame = draw_polygon(frame, points, idx)
 
-    # if detect:
-    #     frame = model.detect(frame=frame, points=points)
-
     key = cv2.waitKey(1)
-    polygons = json_to_polygons()
-    if len(polygons) == 0:
-        if key == ord('q'):
-            break
-        elif key == ord('a'):
-            if curentPoints:
-                curentPoints.append(curentPoints[0])
-                polygons.append(curentPoints)
-            curentPoints = []
-            # detect = True
-
-        elif key == ord('d'):
-            if curentPoints:
-                curentPoints.pop()
-            elif polygons:
-                polygons.pop()
-    if key == ord('\r'):
-        polygons_to_json()
-        video.stop()
-        progress_cal()
 
     if key == ord('q'):
         break
+    elif key == ord('a'):
+        if curentPoints:
+            curentPoints.append(curentPoints[0])
+            polygons.append(curentPoints)
+        curentPoints = []
+        print(polygons)
+        # detect = True
+
+    elif key == ord('d'):
+        if curentPoints:
+            curentPoints.pop()
+        elif polygons:
+            polygons.pop()
+    elif key == ord('\r'):
+        polygons_to_json()
+        video.stop()
+        progress_cal()
 
     # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
