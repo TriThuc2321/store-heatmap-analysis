@@ -21,20 +21,27 @@ def compare_polygons(polygons, centroid, list_results_by_frame):
     for idx, polygon in enumerate(polygons):
         if (is_inside(polygon, centroid)):
             list_results_by_frame[idx]['count'] += 1
-            break
 
 
 def checking(frame, polygons):
     (class_ids, scores, boxes) = od.detect(frame)
+
+    print(scores)
+
+    person_boxes = []
+    for index, id in enumerate(class_ids):
+        #id == 0 (person)
+        if (id == 0):
+            person_boxes.append(boxes[index])
+
     list_results_by_frame = []
     for idx in enumerate(polygons):
         res = {
-            # 'frame': 0,
             'count': 0
         }
         list_results_by_frame.append(res)
 
-    for box in boxes:
+    for box in person_boxes:
         (x, y, w, h) = box
         cx = int((x + x + w) / 2)
         cy = int((y + y + h) / 2)

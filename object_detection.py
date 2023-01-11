@@ -27,8 +27,9 @@ class ObjectDetection:
 
         with open(classes_path, "r") as file_object:
             for class_name in file_object.readlines():
-                class_name = class_name.strip()
-                self.classes.append(class_name)
+                if (class_name == 'person'):
+                    class_name = class_name.strip()
+                    self.classes.append(class_name)
 
         self.colors = np.random.uniform(0, 255, size=(80, 3))
         return self.classes
