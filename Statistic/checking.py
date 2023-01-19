@@ -1,10 +1,10 @@
+from object_detection import detect
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import cv2
 import json
 from object_detection import ObjectDetection
 od = ObjectDetection()
-
 # array of res = {start_time, end_time, count}
 data = []
 
@@ -24,16 +24,14 @@ def compare_polygons(polygons, centroid, list_results_by_frame):
 
 
 def checking(frame, polygons):
-    (class_ids, scores, boxes) = od.detect(frame)
+    # (class_ids, scores, boxes) = od.detect(frame)
+    # person_boxes = []
+    # for index, id in enumerate(class_ids):
+    #     #id == 0 (person)
+    #     if (id == 0):
+    #         person_boxes.append(boxes[index])
 
-    print(scores)
-
-    person_boxes = []
-    for index, id in enumerate(class_ids):
-        #id == 0 (person)
-        if (id == 0):
-            person_boxes.append(boxes[index])
-
+    person_boxes = detect(frame)
     list_results_by_frame = []
     for idx in enumerate(polygons):
         res = {
@@ -49,7 +47,7 @@ def checking(frame, polygons):
                          list_results_by_frame=list_results_by_frame)
         data.append(list_results_by_frame)
         data_to_json()
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
 
 def data_to_json():

@@ -10,6 +10,8 @@ list_area = []
 
 analyst_array = []
 
+FRAME_PER_SECOND = 100
+
 
 def json_to_data():
     try:
@@ -19,7 +21,7 @@ def json_to_data():
         return []
 
 
-def analyst():
+def analyst(frame_rate):
     # data la list cac frame
     data = json_to_data()
     list_area = get_area()
@@ -42,19 +44,21 @@ def analyst():
             if area_data[cnt] > 0:
                 count_per_frame_flag[area_idx]["total_frame"] += 1
                 count_per_frame_flag[area_idx]["total_person"] += area_data[cnt]
+            #("count_per_frame_flag", count_per_frame_flag)
     count_list = handle_count_person_list(
         count_per_frame_flag=count_per_frame_flag)
 
     results = []
     n = len(list_area)
 
-    print(total_time)
-
     for i in range(0, n):
         results.append({
             "no": i,
-            "total_time": round(count_per_frame_flag[i]["total_frame"]/4, 2),
-            "total_person": count_list[i]
+            "total_time": round(count_per_frame_flag[i]["total_frame"]/FRAME_PER_SECOND, 2)
+            * round(frame_rate, 0),
+            "total_person": count_list[i],
+            "sum_frame": count_per_frame_flag[i]["total_frame"],
+            "sum_person": count_per_frame_flag[i]["total_person"]
         })
     return results
 
@@ -76,25 +80,26 @@ def sort_per_time():
     return tmp
 
 
-def sort_per_count():
-    tmp = analyst()
+def sort_per_count(frame_rate):
+    tmp = analyst(frame_rate)
     tmp.sort(key=lambda x: x["total_person"], reverse=True)
     return tmp
 
 
-def analyst_to_excel():
+def analyst_to_excel(real_count_frames, accurate_count_frames):
     path = 'analyst.xlsx'
-    list = sort_per_count()
+    frame_rate = accurate_count_frames / real_count_frames
+    list = sort_per_count(frame_rate)
 
-    print(list)
     data = []
 
     for i in range(0, len(list)):
         tmp_obj = list[i]
         data.append([tmp_obj["no"], normalize_time_data(tmp_obj["total_time"]),
-                    tmp_obj["total_person"]])
+                    tmp_obj["total_person"], tmp_obj["sum_frame"], tmp_obj["sum_person"]])
 
-    df = pd.DataFrame(data, columns=['Khu vực', 'Thời gian', 'Tổng số người'])
+    df = pd.DataFrame(
+        data, columns=['Khu vực', 'Thời gian', 'TB người', 'Tổng frame', 'Tổng người'])
     df.to_excel(path)
 
 

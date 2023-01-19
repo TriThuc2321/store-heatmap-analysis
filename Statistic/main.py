@@ -16,7 +16,7 @@ curentPoints = []
 polygons = []
 file_name = 'area.json'
 
-FRAME_PER_SECOND = 4
+FRAME_PER_SECOND = 100
 
 
 def handle_left_click(event, x, y, flags, points):
@@ -40,25 +40,32 @@ def draw_polygon(frame, points, idx):
 
 
 def progress_cal():
+    print(datetime.datetime.now())
     cv2.destroyWindow("Instrusion Warning")
-    # cv2.destroyAllWindows()
-    video = VideoStream('../dataset/video.mp4',
-                        framerate=FRAME_PER_SECOND).start()
+    cv2.destroyAllWindows()
+    video = VideoStream('../dataset/video.mp4').start()
+    count = 0
     while True:
         frame = video.read()
         frame = cv2.flip(frame, 1)
-        key = cv2.waitKey(1)
+        key = cv2.waitKey(int(1000/FRAME_PER_SECOND))
         if key == ord('q'):
             break
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
+        try:
+            checking(frame=frame, polygons=polygons)
+        except Exception as e:
+            print(str(e))
+            break
+        count += 1
+        # print(count)
 
-        checking(frame=frame, polygons=polygons)
-
-        cv2.imshow("Calculate", frame)
+        #cv2.imshow("Calculate", frame)
 
     video.stop()
-    analyst_to_excel()
+    print(datetime.datetime.now())
+    analyst_to_excel(count, number_of_frames)
     cv2.destroyAllWindows()
 
 
@@ -82,6 +89,11 @@ def json_to_polygons():
 
 polygons = json_to_polygons()
 
+video_1 = '../dataset/video.mp4'
+cap = cv2.VideoCapture(video_1)
+number_of_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+print(number_of_frames)
+
 while True:
 
     frame = video.read()
@@ -101,8 +113,6 @@ while True:
             curentPoints.append(curentPoints[0])
             polygons.append(curentPoints)
         curentPoints = []
-        print(polygons)
-        # detect = True
 
     elif key == ord('d'):
         if curentPoints:
@@ -114,10 +124,6 @@ while True:
         video.stop()
         progress_cal()
 
-    # Hien anh ra man hinh
     cv2.imshow("Instrusion Warning", frame)
 
     cv2.setMouseCallback('Instrusion Warning', handle_left_click, curentPoints)
-
-# video.stop()
-# cv2.destroyAllWindows()
