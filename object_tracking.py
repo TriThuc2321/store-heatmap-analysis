@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from object_detection import ObjectDetection
+from object_detection_origin import ObjectDetection
 import math
 import datetime
 from imutils.video import VideoStream

@@ -12,8 +12,8 @@ class ObjectDetection:
         net = cv2.dnn.readNet(weights_path, cfg_path)
 
         # Enable GPU CUDA
-        net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-        net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+        # net.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+        # net.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         self.model = cv2.dnn_DetectionModel(net)
 
         self.classes = []
@@ -27,8 +27,9 @@ class ObjectDetection:
 
         with open(classes_path, "r") as file_object:
             for class_name in file_object.readlines():
-                class_name = class_name.strip()
-                self.classes.append(class_name)
+                if (class_name == 'person'):
+                    class_name = class_name.strip()
+                    self.classes.append(class_name)
 
         self.colors = np.random.uniform(0, 255, size=(80, 3))
         return self.classes
