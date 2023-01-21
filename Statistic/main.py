@@ -55,17 +55,17 @@ def progress_cal():
             frame = draw_polygon(frame, list_points, idx)
         try:
             checking(frame=frame, polygons=polygons)
+            count += 1
         except Exception as e:
             print(str(e))
             break
-        count += 1
         # print(count)
 
         #cv2.imshow("Calculate", frame)
 
     video.stop()
     print(datetime.datetime.now())
-    analyst_to_excel(count, number_of_frames)
+    analyst_to_excel(count, number_of_frames_origin, fps_origin)
     cv2.destroyAllWindows()
 
 
@@ -91,8 +91,9 @@ polygons = json_to_polygons()
 
 video_1 = '../dataset/video.mp4'
 cap = cv2.VideoCapture(video_1)
-number_of_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-print(number_of_frames)
+number_of_frames_origin = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+fps_origin = int(cap.get(cv2.CAP_PROP_FPS))
+print(number_of_frames_origin, fps_origin)
 
 while True:
 
