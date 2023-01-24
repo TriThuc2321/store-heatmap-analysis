@@ -12,7 +12,7 @@ video = VideoStream('../dataset/video.mp4').start()
 # points2 = [[300, 400], [300, 500], [400, 250], [300, 400]]
 # polygon = [points1, points2]
 
-curentPoints = []
+currentPoints = []
 polygons = []
 file_name = 'area.json'
 
@@ -92,38 +92,40 @@ polygons = json_to_polygons()
 video_1 = '../dataset/video.mp4'
 cap = cv2.VideoCapture(video_1)
 number_of_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-print(number_of_frames)
 
-while True:
+def runApplication():
+    global currentPoints
+    global polygons
+    while True:
 
-    frame = video.read()
-    frame = cv2.flip(frame, 1)
+        frame = video.read()
+        frame = cv2.flip(frame, 1)
 
-    draw_polygon(frame, curentPoints, len(polygons))
-    # Ve polygon
-    for idx, points in enumerate(polygons):
-        frame = draw_polygon(frame, points, idx)
+        draw_polygon(frame, currentPoints, len(polygons))
+        # Ve polygon
+        for idx, points in enumerate(polygons):
+            frame = draw_polygon(frame, points, idx)
 
-    key = cv2.waitKey(1)
+        key = cv2.waitKey(1)
 
-    if key == ord('q'):
-        break
-    elif key == ord('a'):
-        if curentPoints:
-            curentPoints.append(curentPoints[0])
-            polygons.append(curentPoints)
-        curentPoints = []
+        if key == ord('q'):
+            break
+        elif key == ord('a'):
+            if currentPoints:
+                currentPoints.append(currentPoints[0])
+                polygons.append(currentPoints)
+            currentPoints = []
 
-    elif key == ord('d'):
-        if curentPoints:
-            curentPoints.pop()
-        elif polygons:
-            polygons.pop()
-    elif key == ord('\r'):
-        polygons_to_json()
-        video.stop()
-        progress_cal()
+        elif key == ord('d'):
+            if currentPoints:
+                currentPoints.pop()
+            elif polygons:
+                polygons.pop()
+        elif key == ord('\r'):
+            polygons_to_json()
+            video.stop()
+            progress_cal()
 
-    cv2.imshow("Instrusion Warning", frame)
+        cv2.imshow("Instrusion Warning", frame)
 
-    cv2.setMouseCallback('Instrusion Warning', handle_left_click, curentPoints)
+        cv2.setMouseCallback('Instrusion Warning', handle_left_click, currentPoints)

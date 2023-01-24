@@ -1,4 +1,6 @@
 import wx
+from main import runApplication
+
 
 class MyFrame(wx.Frame):    
     def __init__(self):
@@ -18,9 +20,10 @@ class MyFrame(wx.Frame):
 
         openFileDialog.ShowModal()
         path = openFileDialog.GetPath()
-        print(path)
         self.videoPathLb.SetLabel(path)
         openFileDialog.Destroy()
+        runApplication()
+       
 
 if __name__ == '__main__':
     app = wx.App()
