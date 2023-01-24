@@ -46,8 +46,9 @@ def checking(frame, polygons):
         compare_polygons(polygons=polygons, centroid=(cx, cy),
                          list_results_by_frame=list_results_by_frame)
         data.append(list_results_by_frame)
-        data_to_json()
+
         #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    data_to_json()
 
 
 def data_to_json():

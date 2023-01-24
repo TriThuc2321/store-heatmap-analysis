@@ -54,8 +54,9 @@ def analyst(frame_rate, fps_origin):
     for i in range(0, n):
         results.append({
             "no": i,
-            "total_time": round(count_per_frame_flag[i]["total_frame"]/fps_origin, 0)
-            * round(frame_rate, 0),
+            "total_time": round(count_per_frame_flag[i]["total_frame"]
+                                * frame_rate / fps_origin,
+                                0),
             "total_person": count_list[i],
             "sum_frame": count_per_frame_flag[i]["total_frame"],
             "sum_person": count_per_frame_flag[i]["total_person"]
@@ -89,6 +90,7 @@ def sort_per_count(frame_rate, fps_origin):
 def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin):
     path = 'analyst.xlsx'
     frame_rate = accurate_count_frames_origin / real_count_frames
+    print("frame rate" + str(frame_rate))
     list = sort_per_count(frame_rate, fps_origin)
 
     data = []

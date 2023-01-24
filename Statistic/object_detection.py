@@ -74,7 +74,7 @@ def detect(frame):
         w = box[2]
         h = box[3]
         # draw_prediction(frame, class_ids[i], round(
-        #    x), round(y), round(x + w), round(y + h))
+        #     x), round(y), round(x + w), round(y + h))
     return boxes
 
 
