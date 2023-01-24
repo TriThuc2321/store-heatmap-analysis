@@ -28,11 +28,20 @@ class MyFrame(wx.Frame):
         browser_btn = wx.Button(panel, label='Browser', pos = (520, 10), size = (120, 25))
         browser_btn.Bind(wx.EVT_BUTTON, self.on_open_browser)
 
-        get_report_btn = wx.Button(panel, label='Get report analysis', pos = (520, 40), size = (120, 25))
+        get_report_btn = wx.Button(panel, label='Get heatmap analysis', pos = (520, 40), size = (120, 25))
+        get_report_btn.Bind(wx.EVT_BUTTON, self.on_get_heatmap_analysis)
+
+        get_report_btn = wx.Button(panel, label='Open heatmap video', pos = (520, 70), size = (120, 25))
+        get_report_btn.Bind(wx.EVT_BUTTON, self.on_open_heatmap)
+        
+        get_report_btn = wx.Button(panel, label='Get report analysis', pos = (520, 100), size = (120, 25))
         get_report_btn.Bind(wx.EVT_BUTTON, self.on_get_report_analysis)
 
-        get_report_btn = wx.Button(panel, label='Open excel', pos = (520, 70), size = (120, 25))
+        get_report_btn = wx.Button(panel, label='Open excel', pos = (520, 130), size = (120, 25))
         get_report_btn.Bind(wx.EVT_BUTTON, self.on_open_excel)
+
+        get_report_btn = wx.Button(panel, label='Open camera', pos = (520, 160), size = (120, 25))
+        get_report_btn.Bind(wx.EVT_BUTTON, self.on_open_camera)
 
         self.Centre()      
         self.Show()
@@ -45,12 +54,21 @@ class MyFrame(wx.Frame):
         self.video_path_tc.SetLabel(path)
         openFileDialog.Destroy()
     
+    def on_get_heatmap_analysis():
+        print('open excel')
+
+    def on_open_heatmap():
+        print('open excel')
+
     def on_get_report_analysis(self):
         if(self.video_path_tc.GetLabel != ''):
             runApplication()
     
     def on_open_excel():
         print('open excel')
+
+    def on_open_camera():
+        print('open camera')
 
 
 if __name__ == '__main__':
