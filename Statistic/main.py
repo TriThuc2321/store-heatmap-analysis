@@ -43,7 +43,7 @@ def progress_cal():
     print(datetime.datetime.now())
     cv2.destroyWindow("Instrusion Warning")
     cv2.destroyAllWindows()
-    video = VideoStream('../dataset/video.mp4').start()
+    video = VideoStream('../dataset/video_trimmed.mp4').start()
     count = 0
     while True:
         frame = video.read()
@@ -125,6 +125,7 @@ def runApplication():
             polygons_to_json()
             video.stop()
             progress_cal()
+            break
 
         cv2.imshow("Instrusion Warning", frame)
 
