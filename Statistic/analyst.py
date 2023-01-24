@@ -10,7 +10,7 @@ list_area = []
 
 analyst_array = []
 
-FRAME_PER_SECOND = 100
+FRAME_PER_SECOND = 30
 
 
 def json_to_data():
@@ -21,7 +21,7 @@ def json_to_data():
         return []
 
 
-def analyst(frame_rate):
+def analyst(frame_rate, fps_origin):
     # data la list cac frame
     data = json_to_data()
     list_area = get_area()
@@ -54,8 +54,9 @@ def analyst(frame_rate):
     for i in range(0, n):
         results.append({
             "no": i,
-            "total_time": round(count_per_frame_flag[i]["total_frame"]/FRAME_PER_SECOND, 2)
-            * round(frame_rate, 0),
+            "total_time": round(count_per_frame_flag[i]["total_frame"]
+                                * frame_rate / fps_origin,
+                                0),
             "total_person": count_list[i],
             "sum_frame": count_per_frame_flag[i]["total_frame"],
             "sum_person": count_per_frame_flag[i]["total_person"]
@@ -80,16 +81,17 @@ def sort_per_time():
     return tmp
 
 
-def sort_per_count(frame_rate):
-    tmp = analyst(frame_rate)
+def sort_per_count(frame_rate, fps_origin):
+    tmp = analyst(frame_rate, fps_origin)
     tmp.sort(key=lambda x: x["total_person"], reverse=True)
     return tmp
 
 
-def analyst_to_excel(real_count_frames, accurate_count_frames):
+def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin):
     path = 'analyst.xlsx'
-    frame_rate = accurate_count_frames / real_count_frames
-    list = sort_per_count(frame_rate)
+    frame_rate = accurate_count_frames_origin / real_count_frames
+    print("frame rate" + str(frame_rate))
+    list = sort_per_count(frame_rate, fps_origin)
 
     data = []
 
@@ -99,7 +101,7 @@ def analyst_to_excel(real_count_frames, accurate_count_frames):
                     tmp_obj["total_person"], tmp_obj["sum_frame"], tmp_obj["sum_person"]])
 
     df = pd.DataFrame(
-        data, columns=['Khu vực', 'Thời gian', 'TB người', 'Tổng frame', 'Tổng người'])
+        data, columns=['Khu vực', 'Thời gian', 'TB người/frame', 'Tổng frame detect có người', 'Tổng lần detect (người)'])
     df.to_excel(path)
 
 
