@@ -1,7 +1,7 @@
 import wx
 from main import runApplication
 from heatmap import runHeatmap
-
+import json
 from detech import runDetech
 import os
 
@@ -16,7 +16,7 @@ class AnalystDialog(wx.Dialog):
             parent, title=title, size=(250, 150))
         panel = wx.Panel(self)
         self.btn = wx.Button(panel, wx.ID_OK, label="OK",
-                             size=(80, 30), pos=(105, 80))
+                             size=(80, 30), pos=(90, 65))
         self.message = wx.StaticText(panel, size=(200, 30), pos=(50, 30))
         self.message.SetLabelText(message_text)
 
