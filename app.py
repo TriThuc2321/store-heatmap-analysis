@@ -1,7 +1,7 @@
 import wx
-from main import runApplication
+from Statistic.main import runApplication
 
-from detech import runDetech
+from Statistic.detech import runDetech
 
 # self.videoPathLb = wx.StaticText(panel, -1, 'Video path')
 # my_sizer.Add(self.videoPathLb, 0, wx.ALL | wx.EXPAND, 5) 
