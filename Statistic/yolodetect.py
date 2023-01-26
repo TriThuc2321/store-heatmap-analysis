@@ -10,7 +10,6 @@ import threading
 def isInside(points, centroid):
     polygon = Polygon(points)
     centroid = Point(centroid)
-    print(polygon.contains(centroid))
     return polygon.contains(centroid)
 
 

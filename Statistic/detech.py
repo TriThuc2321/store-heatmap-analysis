@@ -6,7 +6,7 @@ import json
 
 video = VideoStream('../dataset/video.mp4').start()
 
-vid = cv2.VideoCapture(1)
+
 
 # chứa các điểm người dùng chọn để tạo đa giác
 currentPoints = []
@@ -57,13 +57,14 @@ def json_to_polygons():
 
 
 polygons = json_to_polygons()
-
+vid = cv2.VideoCapture(0)
 
 def runDetech():
     global currentPoints
     global polygons
     global detect
-    
+
+
     while True:
 
         #     frame = vid.read()
@@ -76,8 +77,7 @@ def runDetech():
         # video.stop()
         # cv2.destroyAllWindows()
 
-        frame = video.read()
-        frame = cv2.flip(frame, 1)
+        ret, frame = vid.read()
 
         # Ve polygon
         # frame = draw_polygon(frame, points)
@@ -101,12 +101,10 @@ def runDetech():
                 polygons.append(currentPoints)
             currentPoints = []
             detect = True
-            print(polygons)
 
         # Bấm d để xóa mỗi cạnh của polygon
         elif key == ord('d'):
 
-            print('d')
             if currentPoints:
                 currentPoints.pop()
             elif polygons:
@@ -124,5 +122,5 @@ def runDetech():
         cv2.setMouseCallback('Instrusion Warning',
                              handle_left_click, currentPoints)
 
-    video.stop()
+    vid.release()
     cv2.destroyAllWindows()
