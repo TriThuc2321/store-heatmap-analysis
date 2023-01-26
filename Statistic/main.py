@@ -5,10 +5,9 @@ import json
 from checking import checking
 import datetime
 from analyst import analyst_to_excel
+import wx
 
 
-VIDEO_DATASET = '../dataset/video.mp4'
-video = VideoStream(VIDEO_DATASET).start()
 # chứa các điểm người dùng chọn để tạo đa giác
 # points1 = [[100, 200], [100, 300], [200, 150], [100, 200]]
 # points2 = [[300, 400], [300, 500], [400, 250], [300, 400]]
@@ -17,6 +16,8 @@ video = VideoStream(VIDEO_DATASET).start()
 currentPoints = []
 polygons = []
 file_name = 'area.json'
+
+title = "Press: a (add point), z(delete all area), d (delete point), ENTER (start ananlyst)"
 
 FRAME_PER_SECOND = 100
 
@@ -42,8 +43,9 @@ def draw_polygon(frame, points, idx):
 
 
 def progress_cal():
+    dialog.Show()
     print(datetime.datetime.now())
-    cv2.destroyWindow("Instrusion Warning")
+    cv2.destroyWindow(title)
     cv2.destroyAllWindows()
     video = VideoStream(VIDEO_DATASET).start()
     count = 0
@@ -62,12 +64,16 @@ def progress_cal():
             print("Actual frame: " + str(count))
             break
 
-        #cv2.imshow("Calculate", frame)
+        # cv2.imshow("Calculate", frame)
 
     video.stop()
     print(datetime.datetime.now())
     analyst_to_excel(count, number_of_frames_origin, fps_origin)
+
     cv2.destroyAllWindows()
+    dialog.SetTitle("Done!!")
+    dialog.set_message("Progress done!")
+    dialog.Show()
 
 
 detect = []
@@ -88,17 +94,23 @@ def json_to_polygons():
         return []
 
 
-polygons = json_to_polygons()
-
-
-cap = cv2.VideoCapture(VIDEO_DATASET)
-number_of_frames_origin = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-fps_origin = int(cap.get(cv2.CAP_PROP_FPS))
-print(number_of_frames_origin, fps_origin)
-
-def runApplication():
+def runApplication(progress_dialog, video_path):
     global currentPoints
     global polygons
+    global number_of_frames_origin
+    global fps_origin
+    global dialog
+    global VIDEO_DATASET
+    dialog = progress_dialog
+
+    polygons = json_to_polygons()
+    VIDEO_DATASET = str(video_path)
+    video = VideoStream(VIDEO_DATASET).start()
+    cap = cv2.VideoCapture(VIDEO_DATASET)
+    number_of_frames_origin = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    fps_origin = int(cap.get(cv2.CAP_PROP_FPS))
+    print(number_of_frames_origin, fps_origin)
+
     while True:
 
         frame = video.read()
@@ -117,6 +129,9 @@ def runApplication():
                 currentPoints.append(currentPoints[0])
                 polygons.append(currentPoints)
             currentPoints = []
+        elif key == ord('z'):
+            polygons = []
+            currentPoints = []
 
         elif key == ord('d'):
             if currentPoints:
@@ -129,6 +144,7 @@ def runApplication():
             progress_cal()
             break
 
-        cv2.imshow("Instrusion Warning", frame)
+        cv2.imshow(title, frame)
 
-        cv2.setMouseCallback('Instrusion Warning', handle_left_click, currentPoints)
+        cv2.setMouseCallback(title,
+                             handle_left_click, currentPoints)

@@ -53,6 +53,6 @@ def checking(frame, polygons):
 
 def data_to_json():
     json_object = json.dumps(data)
-    file_name = 'results.json'
+    file_name = 'detect_person.json'
     with open(file_name, "w") as outfile:
         outfile.write(json_object)

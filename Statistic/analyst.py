@@ -2,7 +2,7 @@ import json
 import openpyxl
 import pandas as pd
 
-file_name = 'results.json'
+file_name = 'detect_person.json'
 
 data = []
 
@@ -100,6 +100,7 @@ def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin
         data.append([tmp_obj["no"], normalize_time_data(tmp_obj["total_time"]),
                     tmp_obj["total_person"], tmp_obj["sum_frame"], tmp_obj["sum_person"]])
 
+    data_to_json(data)
     df = pd.DataFrame(
         data, columns=['Khu vực', 'Thời gian', 'TB người/frame', 'Tổng frame detect có người', 'Tổng lần detect (người)'])
     df.to_excel(path)
@@ -131,3 +132,10 @@ def normalize_time_data(giay):
         return str(phut) + "m" + str(giay) + "s"
     else:
         return str(gio) + "h" + str(phut) + "m" + str(giay) + "s"
+
+
+def data_to_json(data):
+    json_object = json.dumps(data)
+    file_name = 'result_analyst.json'
+    with open(file_name, "w") as outfile:
+        outfile.write(json_object)
