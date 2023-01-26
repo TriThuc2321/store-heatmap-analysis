@@ -1,7 +1,10 @@
 import wx
 from main import runApplication
+from heatmap import runHeatmap
 
 from detech import runDetech
+from os import startfile
+
 
 # self.videoPathLb = wx.StaticText(panel, -1, 'Video path')
 # my_sizer.Add(self.videoPathLb, 0, wx.ALL | wx.EXPAND, 5) 
@@ -57,13 +60,15 @@ class MyFrame(wx.Frame):
         openFileDialog.Destroy()
     
     def on_get_heatmap_analysis(self, event):
-        print('open excel')
+        videoPath = self.video_path_tc.GetLabel()
+        if(self.video_path_tc.GetLabel() != ''):
+            runHeatmap(videoPath)
 
     def on_open_heatmap(self, event):
-        print('open excel')
+        startfile('output_heatmap_video.mp4')
 
     def on_get_report_analysis(self, event):
-        if(self.video_path_tc.GetLabel != ''):
+        if(self.video_path_tc.GetLabel() != ''):
             runApplication()
     
     def on_open_excel(self, event):
