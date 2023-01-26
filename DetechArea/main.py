@@ -32,8 +32,8 @@ def draw_polygon(frame, points):
                           False, (255, 0, 0), thickness=2)
     return frame
 
-
-detect = False
+# set Yolo được phép detect chưa 
+detect = True
 
 
 def polygons_to_json():
