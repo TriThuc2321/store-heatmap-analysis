@@ -130,4 +130,5 @@ dmypy.json
 
 dataset/
 dnn_model/
+App/data
 .DS_Store
