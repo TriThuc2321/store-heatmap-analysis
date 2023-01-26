@@ -17,7 +17,7 @@ cell_size = 40  # 40x40 pixel
 n_cols = frame_width // cell_size
 n_rows = frame_height // cell_size
 alpha = 0.4
-save_video_path = 'output_heatmap_video.mp4'
+save_video_path = 'data/output_heatmap_video.mp4'
 
 heat_matrix = np.zeros((n_rows, n_cols))
 scale = 0.00392 

@@ -4,6 +4,7 @@ from heatmap import runHeatmap
 import json
 from detech import runDetech
 import os
+from os import startfile, path
 
 
 # self.videoPathLb = wx.StaticText(panel, -1, 'Video path')
@@ -88,7 +89,8 @@ class MyFrame(wx.Frame):
             runHeatmap(videoPath)
 
     def on_open_heatmap(self, event):
-        startfile('output_heatmap_video.mp4')
+        file_path = path.relpath("data/output_heatmap_video.mp4")
+        startfile(file_path)
 
     def on_get_report_analysis(self, event):
         result_analyst = []
