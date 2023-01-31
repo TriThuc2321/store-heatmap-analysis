@@ -41,11 +41,7 @@ class MyFrame(wx.Frame):
         self.list.InsertColumn(3, 'Tổng frame', wx.LIST_FORMAT_CENTER, 100)
         self.list.InsertColumn(4, 'Tổng người', wx.LIST_FORMAT_CENTER, 100)
 
-        self.list.InsertItem(0, "-")
-        self.list.SetItem(0, 1, "-")
-        self.list.SetItem(0, 2, "-")
-        self.list.SetItem(0, 3, "-")
-        self.list.SetItem(0, 4, "-")
+        self.reset_list()
 
         browser_btn = wx.Button(panel, label='Browser',
                                 pos=(520, 10), size=(120, 25))
@@ -101,7 +97,8 @@ class MyFrame(wx.Frame):
                            video_path=self.video_path_tc.GetValue().replace("\\", "/"))
             try:
                 self.list.DeleteAllItems()
-                with open("result_analyst.json", 'r') as openfile:
+                self.reset_list()
+                with open("data/result_analyst.json", 'r') as openfile:
                     result_analyst = json.load(openfile)
                     # print(result_analyst)
                     for index, area in enumerate(result_analyst):
@@ -120,6 +117,13 @@ class MyFrame(wx.Frame):
             runDetech()
 
         print('open camera')
+
+    def reset_list(self):
+        self.list.InsertItem(0, "-")
+        self.list.SetItem(0, 1, "-")
+        self.list.SetItem(0, 2, "-")
+        self.list.SetItem(0, 3, "-")
+        self.list.SetItem(0, 4, "-")
 
 
 if __name__ == '__main__':

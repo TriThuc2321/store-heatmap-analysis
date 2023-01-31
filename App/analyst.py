@@ -2,7 +2,7 @@ import json
 import openpyxl
 import pandas as pd
 
-file_name = 'detect_person.json'
+file_name = 'data/detect_person.json'
 
 data = []
 
@@ -88,7 +88,7 @@ def sort_per_count(frame_rate, fps_origin):
 
 
 def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin):
-    path = 'analyst.xlsx'
+    path = 'data/analyst.xlsx'
     frame_rate = accurate_count_frames_origin / real_count_frames
     print("frame rate" + str(frame_rate))
     list = sort_per_count(frame_rate, fps_origin)
@@ -107,7 +107,7 @@ def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin
 
 
 def get_area():
-    file_name = 'area.json'
+    file_name = 'data/area.json'
     try:
         with open(file_name, 'r') as openfile:
             return json.load(openfile)
@@ -136,6 +136,6 @@ def normalize_time_data(giay):
 
 def data_to_json(data):
     json_object = json.dumps(data)
-    file_name = 'result_analyst.json'
+    file_name = 'data/result_analyst.json'
     with open(file_name, "w") as outfile:
         outfile.write(json_object)

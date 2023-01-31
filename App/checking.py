@@ -23,7 +23,7 @@ def compare_polygons(polygons, centroid, list_results_by_frame):
             list_results_by_frame[idx]['count'] += 1
 
 
-def checking(frame, polygons):
+def checking(frame, polygons, is_end):
     # (class_ids, scores, boxes) = od.detect(frame)
     # person_boxes = []
     # for index, id in enumerate(class_ids):
@@ -31,28 +31,30 @@ def checking(frame, polygons):
     #     if (id == 0):
     #         person_boxes.append(boxes[index])
 
-    person_boxes = detect(frame)
-    list_results_by_frame = []
-    for idx in enumerate(polygons):
-        res = {
-            'count': 0
-        }
-        list_results_by_frame.append(res)
+    if is_end != True:
+        person_boxes = detect(frame)
+        list_results_by_frame = []
+        for idx in enumerate(polygons):
+            res = {
+                'count': 0
+            }
+            list_results_by_frame.append(res)
 
-    for box in person_boxes:
-        (x, y, w, h) = box
-        cx = int((x + x + w) / 2)
-        cy = int((y + y + h) / 2)
-        compare_polygons(polygons=polygons, centroid=(cx, cy),
-                         list_results_by_frame=list_results_by_frame)
-        data.append(list_results_by_frame)
+        for box in person_boxes:
+            (x, y, w, h) = box
+            cx = int((x + x + w) / 2)
+            cy = int((y + y + h) / 2)
+            compare_polygons(polygons=polygons, centroid=(cx, cy),
+                             list_results_by_frame=list_results_by_frame)
+            data.append(list_results_by_frame)
 
-        #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-    data_to_json()
+        data_to_json()
+    else:
+        data.clear()
 
 
 def data_to_json():
     json_object = json.dumps(data)
-    file_name = 'detect_person.json'
+    file_name = 'data/detect_person.json'
     with open(file_name, "w") as outfile:
         outfile.write(json_object)

@@ -5,7 +5,7 @@ import json
 from checking import checking
 import datetime
 from analyst import analyst_to_excel
-import wx
+import os
 
 
 # chứa các điểm người dùng chọn để tạo đa giác
@@ -15,7 +15,7 @@ import wx
 
 currentPoints = []
 polygons = []
-file_name = 'area.json'
+file_name = 'data/area.json'
 
 title = "Press: a (add point), z(delete all area), d (delete point), ENTER (start ananlyst)"
 
@@ -57,9 +57,10 @@ def progress_cal():
         for idx, list_points in enumerate(polygons):
             frame = draw_polygon(frame, list_points, idx)
         try:
-            checking(frame=frame, polygons=polygons)
+            checking(frame=frame, polygons=polygons, is_end=False)
             count += 1
         except Exception as e:
+            checking(frame=frame, polygons=polygons, is_end=True)
             print(str(e))
             print("Actual frame: " + str(count))
             break
@@ -82,8 +83,14 @@ detect = []
 def polygons_to_json():
     json_object = json.dumps(polygons)
 
-    with open(file_name, "w") as outfile:
-        outfile.write(json_object)
+    try:
+        folder_data_existed = os.path.exists("data")
+        if (folder_data_existed == False):
+            os.makedirs("data")
+        with open(file_name, "w") as outfile:
+            outfile.write(json_object)
+    except Exception as e:
+        print(e)
 
 
 def json_to_polygons():
