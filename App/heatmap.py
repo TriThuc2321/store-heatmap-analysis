@@ -11,15 +11,11 @@ conf_threshold = 0.5
 nms_threshold = 0.4
 detect_class = "person"
 
-frame_width = 1280
-frame_height = 720
+
 cell_size = 40  # 40x40 pixel
-n_cols = frame_width // cell_size
-n_rows = frame_height // cell_size
 alpha = 0.4
 save_video_path = 'data/output_heatmap_video.mp4'
 
-heat_matrix = np.zeros((n_rows, n_cols))
 scale = 0.00392 
 
 yolo_net = cv2.dnn.readNet(weights_file, config_file)
@@ -77,10 +73,22 @@ def draw_prediction(img, class_id, x, y, x_plus_w, y_plus_h):
 
 def runHeatmap(videoPath, progress_dialog):
     global dialog
-    dialog = progress_dialog
+    global frame_width
+    global frame_height 
+    global n_cols 
+    global n_rows
+    global heat_matrix
 
+    dialog = progress_dialog
     dialog.Show()
     video = VideoStream(videoPath).start()
+
+    frame = video.read()
+    frame_height, frame_width = frame.shape[0], frame.shape[1]
+    n_cols = frame_width // cell_size
+    n_rows = frame_height // cell_size
+    heat_matrix = np.zeros((n_rows, n_cols))
+
     out_writer = cv2.VideoWriter(save_video_path, cv2.VideoWriter_fourcc(*'mp4v'), 5, (frame_width, frame_height))
 
     while True:
