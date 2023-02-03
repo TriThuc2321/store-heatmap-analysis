@@ -91,7 +91,7 @@ class MyFrame(wx.Frame):
 
     def on_get_report_analysis(self, event):
         result_analyst = []
-        if (self.video_path_tc.GetLabel != ''):
+        if (self.video_path_tc.GetLabel() != ''):
             progress_dialog = AnalystDialog(
                 self, "Start progress...", "Please wait")
             runApplication(progress_dialog=progress_dialog,
