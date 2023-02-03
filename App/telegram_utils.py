@@ -10,7 +10,7 @@ bot = telegram.Bot(token=my_token)
 # send text message
 
 
-def send_telegram(photo_path="alert.png"):
+def send_telegram(photo_path="data/alert.png"):
     try:
         bot = telegram.Bot(token=my_token)
         bot.sendPhoto(chat_id=my_chatid, photo=open(

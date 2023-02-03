@@ -66,8 +66,7 @@ class YoloDetect():
         if (self.last_alert is None) or (
                 (datetime.datetime.utcnow() - self.last_alert).total_seconds() > self.alert_telegram_each):
             self.last_alert = datetime.datetime.utcnow()
-            cv2.imwrite("alert.png", cv2.resize(
-                img, dsize=None, fx=0.2, fy=0.2))
+            cv2.imwrite("data/alert.png", cv2.resize(img, dsize=None, fx=0.2, fy=0.2))
             thread = threading.Thread(target=send_telegram)
             thread.start()
         return img
