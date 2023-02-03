@@ -82,7 +82,8 @@ class MyFrame(wx.Frame):
     def on_get_heatmap_analysis(self, event):
         videoPath = self.video_path_tc.GetLabel()
         if (self.video_path_tc.GetLabel() != ''):
-            runHeatmap(videoPath)
+            progress_dialog = AnalystDialog(self, "Start progress...", "Please wait")
+            runHeatmap(videoPath, progress_dialog=progress_dialog)
 
     def on_open_heatmap(self, event):
         file_path = path.relpath("data/output_heatmap_video.mp4")

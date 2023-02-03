@@ -75,7 +75,11 @@ def draw_prediction(img, class_id, x, y, x_plus_w, y_plus_h):
 
 
 
-def runHeatmap(videoPath):
+def runHeatmap(videoPath, progress_dialog):
+    global dialog
+    dialog = progress_dialog
+
+    dialog.Show()
     video = VideoStream(videoPath).start()
     out_writer = cv2.VideoWriter(save_video_path, cv2.VideoWriter_fourcc(*'mp4v'), 5, (frame_width, frame_height))
 
@@ -135,6 +139,9 @@ def runHeatmap(videoPath):
         except:
             out_writer.release()
             print('Video has already released.')
+            dialog.SetTitle("Done!!")
+            dialog.set_message("Progress done!")
+            dialog.Show()
             break
 
     
