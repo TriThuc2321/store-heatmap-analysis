@@ -151,7 +151,10 @@ def runApplication(progress_dialog, video_path):
             progress_cal()
             break
 
-        cv2.imshow(title, frame)
+        try:
+            cv2.imshow(title, frame)
+        except Exception as e:
+            video = VideoStream(VIDEO_DATASET).start()
 
         cv2.setMouseCallback(title,
                              handle_left_click, currentPoints)
