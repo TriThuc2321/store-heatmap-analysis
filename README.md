@@ -31,7 +31,7 @@ pip install
 python3 app.py
 ```
 
-# Contributor
+## Contributor
 
 - 19522321 - Tran Tri Thuc
 - 19520145 - Nguyen Khanh Linh
