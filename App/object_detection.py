@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 
 classnames_file = "../dnn_model/classes.txt"
-weights_file = "../dnn_model/yolov4.weights"
-config_file = "../dnn_model/yolov4.cfg"
+weights_file = "../dnn_model/yolov4-tiny.weights"
+config_file = "../dnn_model/yolov4-tiny.cfg"
 conf_threshold = 0.5
 nms_threshold = 0.4
 detect_class = "person"
