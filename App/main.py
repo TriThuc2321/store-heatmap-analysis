@@ -58,18 +58,16 @@ def progress_cal():
             frame = draw_polygon(frame, list_points, idx)
         try:
             checking(frame=frame, polygons=polygons, is_end=False)
-            count += 1
         except Exception as e:
             checking(frame=frame, polygons=polygons, is_end=True)
             print(str(e))
-            print("Actual frame: " + str(count))
             break
 
         # cv2.imshow("Calculate", frame)
 
     video.stop()
     print(datetime.datetime.now())
-    analyst_to_excel(count, number_of_frames_origin, fps_origin)
+    analyst_to_excel(number_of_frames_origin, fps_origin)
 
     cv2.destroyAllWindows()
     dialog.SetTitle("Done!!")
@@ -116,6 +114,7 @@ def runApplication(progress_dialog, video_path):
     cap = cv2.VideoCapture(VIDEO_DATASET)
     number_of_frames_origin = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     fps_origin = int(cap.get(cv2.CAP_PROP_FPS))
+    print("\n\n")
     print(number_of_frames_origin, fps_origin)
 
     while True:

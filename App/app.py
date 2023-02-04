@@ -36,7 +36,7 @@ class MyFrame(wx.Frame):
             panel, -1, style=wx.LC_REPORT, size=(500, 200), pos=(10, 40))
         self.list.InsertColumn(0, 'Khu vực', wx.LIST_FORMAT_CENTER, width=80,)
         self.list.InsertColumn(1, 'Thời gian', wx.LIST_FORMAT_CENTER, 80)
-        self.list.InsertColumn(2, 'Trung bình người',
+        self.list.InsertColumn(2, 'Trung bình người / frame',
                                wx.LIST_FORMAT_CENTER, 140)
         self.list.InsertColumn(3, 'Tổng frame', wx.LIST_FORMAT_CENTER, 100)
         self.list.InsertColumn(4, 'Tổng người', wx.LIST_FORMAT_CENTER, 100)
@@ -110,7 +110,8 @@ class MyFrame(wx.Frame):
                 result_analyst = []
 
     def on_open_excel(self, event):
-        os.startfile('analyst.xlsx')
+        file_path = path.relpath("data/analyst.xlsx")
+        startfile(file_path)
 
     def on_open_camera(self, event):
 

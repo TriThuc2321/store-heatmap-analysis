@@ -87,9 +87,12 @@ def sort_per_count(frame_rate, fps_origin):
     return tmp
 
 
-def analyst_to_excel(real_count_frames, accurate_count_frames_origin, fps_origin):
+def analyst_to_excel(accurate_count_frames_origin, fps_origin):
     path = 'data/analyst.xlsx'
-    frame_rate = accurate_count_frames_origin / real_count_frames
+
+    count_length = len(json_to_data())
+    print("Actual frame: " + str(count_length))
+    frame_rate = accurate_count_frames_origin / count_length
     print("frame rate" + str(frame_rate))
     list = sort_per_count(frame_rate, fps_origin)
 

@@ -3,8 +3,6 @@ from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import cv2
 import json
-from object_detection import ObjectDetection
-od = ObjectDetection()
 # array of res = {start_time, end_time, count}
 data = []
 
@@ -40,16 +38,18 @@ def checking(frame, polygons, is_end):
             }
             list_results_by_frame.append(res)
 
-        for box in person_boxes:
-            (x, y, w, h) = box
-            cx = int((x + x + w) / 2)
-            cy = int((y + y + h) / 2)
-            compare_polygons(polygons=polygons, centroid=(cx, cy),
-                             list_results_by_frame=list_results_by_frame)
-            data.append(list_results_by_frame)
-
-        data_to_json()
+        if len(person_boxes) == 0:
+            data.append(list_results_by_frame)  
+        else: 
+            for box in person_boxes:
+                (x, y, w, h) = box
+                cx = int((x + x + w) / 2)
+                cy = int((y + y + h) / 2)
+                compare_polygons(polygons=polygons, centroid=(cx, cy),
+                                list_results_by_frame=list_results_by_frame)
+                data.append(list_results_by_frame)       
     else:
+        data_to_json()
         data.clear()
 
 
